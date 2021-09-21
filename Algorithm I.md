@@ -1,7 +1,7 @@
 # Algorithm i
 
 - Update: 20210920
-- Ques: 704, 278, 189
+- Ques: 704, 278, 189, 283, 167
 
 ### 704. Binary Search
 
@@ -49,9 +49,6 @@ class Solution:
 ``` Python
 class Solution:
     def rotate(self, nums: List[int], k: int) -> None:
-        """
-        Do not return anything, modify nums in-place instead.
-        """
         k = k % len(nums)
         if k==0 : return
         tmpInd = len(nums)-k
@@ -88,4 +85,55 @@ class Solution:
                     break
             # 每次替換完一輪後，將啟始位置增加一。
             start += 1
+```
+
+### 283. Move Zeroes
+
+最簡單的想法就是刪除0後，在array後面刪除一樣多的0。
+
+``` Python
+class Solution:
+    def moveZeroes(self, nums: List[int]) -> None:
+        if len(nums)==1: return
+        zero_count = 0
+        check_ind = 0
+        while check_ind < len(nums):
+            if nums[check_ind]==0:
+                zero_count += 1
+                del nums[check_ind]
+            else:
+                check_ind += 1
+        nums.extend([0]*zero_count)
+# 更簡潔的寫法
+class Solution:
+    def moveZeroes(self, nums: List[int]) -> None:
+        count=nums.count(0)
+        nums[:]=[i for i in nums if i != 0]
+        nums+=[0]*count
+```
+
+two pointer的概念，將不是0的值依序往前換。
+
+``` Python
+class Solution:
+    def moveZeroes(self, nums: List[int]) -> None:
+        non_zero = 0
+        for i in range(len(nums)):
+            if nums[i] != 0:
+                nums[non_zero],nums[i] = nums[i],nums[non_zero]
+                non_zero +=1
+```
+
+### 167. Two Sum II - Input array is sorted
+
+利用dict尋找時只需要O(1)，和two-pointer比不過需要額外的空間。
+
+``` Python
+class Solution:
+    def twoSum(self, numbers: List[int], target: int) -> List[int]:
+        dic = {}
+        for i, num in enumerate(numbers):
+            if target-num in dic:
+                return [dic[target-num]+1, i+1]
+            dic[num] = i
 ```
