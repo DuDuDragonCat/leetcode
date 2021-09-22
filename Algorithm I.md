@@ -1,7 +1,7 @@
 # Algorithm i
 
 - Update: 20210920
-- Ques: 704, 278, 189, 283, 167
+- Ques: 704, 278, 189, 283, 167, 344, 557
 
 ### 704. Binary Search
 
@@ -136,4 +136,28 @@ class Solution:
             if target-num in dic:
                 return [dic[target-num]+1, i+1]
             dic[num] = i
+```
+
+### 557. Reverse Words in a String III
+
+Same Ques Sol:
+    1. 344. Reverse String
+
+334和557核心想法為透過two pointer替換左右兩邊的字元，這樣可以在O(n)內完成。
+
+``` Python
+while l <= r: # <=遇到字串為奇數時才會處理中間的值。
+    tmpList[l], tmpList[r] = tmpStr[r], tmpStr[l]
+    l += 1
+    r -= 1
+```
+
+``` Python
+class Solution:
+    def reverseWords(self, s: str) -> str:
+        # God Ding
+        print(s.split()[::-1]) # ['Ding', 'God']
+        print(' '.join(s.split()[::-1])) #Ding God
+        print(' '.join(s.split()[::-1])[::-1]) #doG gniD
+        return ' '.join(s.split()[::-1])[::-1]
 ```
