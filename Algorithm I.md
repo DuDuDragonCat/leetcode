@@ -1,7 +1,7 @@
 # Algorithm i
 
-- Update: 20210920
-- Ques: 704, 278, 189, 283, 167, 344, 557
+- Update: 20210923
+- Ques: 704, 278, 189, 283, 167, 344, 557, 876, 19
 
 ### 704. Binary Search
 
@@ -160,4 +160,47 @@ class Solution:
         print(' '.join(s.split()[::-1])) #Ding God
         print(' '.join(s.split()[::-1])[::-1]) #doG gniD
         return ' '.join(s.split()[::-1])[::-1]
+```
+
+### 876. Middle of the Linked List
+
+此方式只需要遍歷一次list，需要注意奇數與偶數，條件判斷一定要是fast and fast.next。
+
+1. [1, 2, 3]
+   - pass 1: slow: 1; fast: 1; fast.next: 2
+   - pass 2: slow: 2; fast: 3; fast.next: None
+   - pass 3: slow: 2; fast: 3; fast.next: None
+2. [1, 2, 3, 4] `pass 3可以發現fast.next會不存在，利用and的判斷假如第一個是false就不會執行第二個了。`
+   - pass 1: slow: 1; fast: 1; fast.next: 2
+   - pass 2: slow: 2; fast: 3; fast.next: 4
+   - pass 3: slow: 3; fast: None; fast.next: unKnown
+
+``` Python
+class Solution:
+    def middleNode(self, head: Optional[ListNode]) -> Optional[ListNode]:
+        slow = fast = head
+
+        while fast and fast.next:
+            slow = slow.next
+            fast = fast.next.next
+        return slow
+```
+
+### 19. Remove Nth Node From End of List
+
+分快和慢的List，快和慢的間距為n，當快的走到終點時，慢的跳過一個即可刪除第n個元素，需注意只有一個元素的情況。
+
+``` Python
+class Solution:
+    def removeNthFromEnd(self, head: Optional[ListNode], n: int) -> Optional[ListNode]:
+        list_fast = head
+        list_slow = head
+        for _ in range(n):
+            list_fast = list_fast.next
+        if list_fast==None:
+            return(head.next)
+        while list_fast.next:
+            list_fast, list_slow = list_fast.next, list_slow.next
+        list_slow.next = list_slow.next.next
+        return(head)
 ```
