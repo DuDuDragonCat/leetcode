@@ -1,7 +1,7 @@
 # Algorithm i
 
-- Update: 20210925
-- Ques: 704, 278, 189, 283, 167, 344, 557, 876, 19, 3, 567
+- Update: 20210927
+- Ques: 704, 278, 189, 283, 167, 344, 557, 876, 19, 3, 567, 733, 695
 
 ### 704. Binary Search
 
@@ -284,4 +284,62 @@ class Solution:
             if counter == store:
                 return True
         return False
+```
+
+### 733. Flood Fill
+
+這題是dfs的題目。
+
+``` Python
+class Solution:
+    def floodFill(self, image: List[List[int]], sr: int, sc: int, newColor: int) -> List[List[int]]:
+        maxR = len(image)
+        maxC = len(image[0])
+
+        def dfs(r, c):
+            nonlocal maxR, maxC, newColor, image
+            # 不可以超過邊界
+            if r < 0 or c < 0 or r>maxR-1 or c>maxC-1:
+                return
+            # 當遇到新的color或是不是舊的color時
+            if image[r][c]==newColor or image[r][c]!=origCol:
+                return
+            #替換成新的顏色
+            image[r][c] = newColor
+            dfs(r+1,c)
+            dfs(r-1,c)
+            dfs(r,c+1)
+            dfs(r,c-1)
+
+        dfs(sr, sc)
+        return image
+```
+
+Same Ques Sol:
+  1. 695. Max Area of Island
+
+需要注意dfs不能依照深度去看面積，因為是在找一個tree中有多少個節點，深度不等於節點數。
+
+``` Python
+class Solution:
+    def maxAreaOfIsland(self, grid: List[List[int]]) -> int:
+        maxR = len(grid)
+        maxC = len(grid[0])
+        maxGrid = 0
+
+        def dfs(r, c):
+            nonlocal maxR, maxC, grid
+            if r < 0 or c < 0 or r > (maxR-1) or c > (maxC-1):
+                return 0
+            if grid[r][c]==0:
+                return 0
+
+            grid[r][c]=0
+            return dfs(r+1, c) + dfs(r-1, c) + dfs(r, c+1)+ dfs(r, c-1) + 1
+
+        for tmpR in range(maxR):
+            for tmpC in range(maxC):
+                if grid[tmpR][tmpC]==1:
+                    maxGrid = max(dfs(tmpR, tmpC), maxGrid)
+        return maxGrid
 ```
