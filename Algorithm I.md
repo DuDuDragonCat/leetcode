@@ -1,7 +1,7 @@
 # Algorithm i
 
-- Update: 20210923
-- Ques: 704, 278, 189, 283, 167, 344, 557, 876, 19
+- Update: 20210925
+- Ques: 704, 278, 189, 283, 167, 344, 557, 876, 19, 3, 567
 
 ### 704. Binary Search
 
@@ -203,4 +203,85 @@ class Solution:
             list_fast, list_slow = list_fast.next, list_slow.next
         list_slow.next = list_slow.next.next
         return(head)
+```
+
+### 3. Longest Substring Without Repeating Characters
+
+透過改變start的位置來得知到目前字串中字元位置的長度。
+
+``` Python
+class Solution:
+    def lengthOfLongestSubstring(self, s: str) -> int:
+        charMap = {}
+        start = 0
+        longestSubstringLength = 0
+        for end, character in enumerate(s):
+            if character in charMap and charMap[character] >= start:
+                # 要是character在charMap中，且存入的index大於或是start的位置，則將start的位置改變。
+                start = charMap[character] +1
+            else:
+                longestSubstringLength = max(longestSubstringLength, end - start + 1)
+            charMap[character] = end
+        return longestSubstringLength
+```
+
+### 567. Permutation in String
+
+此方法是O(len(s1)*len(s2))
+
+``` Python
+class Solution:
+    def checkInclusion(self, s1: str, s2: str) -> bool:
+        lenS1 = len(s1)
+        s1Map = {}
+        for ind, char in enumerate(s1):
+            if char in s1Map:
+                s1Map[char] += 1
+            else:
+                s1Map[char] = 1
+
+        for start in range(len(s2)-lenS1+1):
+            end = start + lenS1
+            if s2[start] not in s1Map:
+                continue
+            tmpS = s2[start:end]
+            tmpMap = {}
+            for ind, char in enumerate(tmpS):
+                if char in tmpMap:
+                    tmpMap[char] += 1
+                else:
+                    tmpMap[char] = 1
+            if tmpMap==s1Map:
+                return True
+        return False
+```
+
+每次維持當下的window slide是比較好的方式。
+
+此方法是O(len(s2))
+
+``` Python
+class Solution:
+    def checkInclusion(self, s1: str, s2: str) -> bool:
+        n = len(s1)
+        m = len(s2)
+
+        store = [0] * 26
+        for c in s1:
+            store[ord('a') - ord(c)] += 1
+
+        counter = [0] * 26
+        for j in range(0, n):
+            counter[ord('a') - ord(s2[j])] += 1
+
+        if counter == store:
+            return True
+
+        for j in range(n, m):
+            print(j)
+            counter[ord('a') - ord(s2[j])] += 1
+            counter[ord('a') - ord(s2[j - n])] -=  1
+            if counter == store:
+                return True
+        return False
 ```
