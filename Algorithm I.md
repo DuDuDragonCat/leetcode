@@ -1,7 +1,7 @@
 # Algorithm i
 
 - Update: 20210927
-- Ques: 704, 278, 189, 283, 167, 344, 557, 876, 19, 3, 567, 733, 695
+- Ques: 704, 278, 189, 283, 167, 344, 557, 876, 19, 3, 567, 733, 695, 617, 116
 
 ### 704. Binary Search
 
@@ -342,4 +342,39 @@ class Solution:
                 if grid[tmpR][tmpC]==1:
                     maxGrid = max(dfs(tmpR, tmpC), maxGrid)
         return maxGrid
+```
+
+### 617. Merge Two Binary Trees
+
+``` Python
+class Solution:
+    def mergeTrees(self, root1: Optional[TreeNode], root2: Optional[TreeNode]) -> Optional[TreeNode]:
+        if not root1:
+            # 當出現root1沒有的話就把root2貼上來
+            return root2
+        elif not root2:
+            # 當出現root2沒有的話就把root1貼上來
+            return root1
+        else:
+            # 當兩邊都有這個node就相加
+            res = TreeNode(root1.val + root2.val)
+            res.left = self.mergeTrees(root1.left, root2.left)
+            res.right = self.mergeTrees(root1.right, root2.right)
+        return res
+```
+
+### 116. Populating Next Right Pointers in Each Node
+
+``` Python
+class Solution:
+    def connect(self, root: 'Node') -> 'Node':
+        orig = root
+        while root and root.left:
+            next = root.left
+            while root:
+                root.left.next = root.right
+                root.right.next = root.next.left if root.next else None
+                root = root.next
+            root = next
+        return orig
 ```
